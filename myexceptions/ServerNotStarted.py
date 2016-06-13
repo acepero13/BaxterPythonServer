@@ -1,0 +1,2 @@
+class ServerNotStartedException(Exception):
+    pass
