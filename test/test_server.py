@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from Server import Server
-from customexceptions.ServerNotStarted import ServerNotStartedException
+from customexceptions.CustomExceptions import ServerNotStartedException
 from mock import MagicMock
 
 
@@ -19,7 +19,7 @@ class TestServer(TestCase):
         TestCase.assertEqual(self, result, True)
 
     def test_StartListeningWithoutConnectionParameters_isConnectedTrue(self):
-        TestCase.assertRaises(self, ServerNotStartedException, self.server.start_listening, "129.122.2.1", 1314)
+        self.assertRaises(ServerNotStartedException, self.server.start_listening, "129.122.2.1", 1314)
 
     def test_Run_AcceptConnection_Connected(self):
         self.server.accept_new_connection = MagicMock(return_value=False)
