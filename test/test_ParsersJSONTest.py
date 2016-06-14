@@ -1,13 +1,11 @@
 import unittest
 
-from utils.json_parser import JsonParser
-from utils.xml_parser import XMLParser
+from src.utils.json_parser import JsonParser
 
 
 class TestJSONParser(unittest.TestCase):
     def setUp(self):
         self.parser = JsonParser()
-
 
     def test_validjson(self):
         json_object = dict()
@@ -32,5 +30,3 @@ class TestJSONParser(unittest.TestCase):
         res = self.parser.writeJson(json_object)
         test_str = '{"params": [1, 2, 3], "method": "test"}'
         self.assertEquals(res, test_str)
-
-

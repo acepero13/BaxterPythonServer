@@ -1,6 +1,6 @@
 import unittest
 
-from utils.xml_parser import XMLParser
+from src.utils.xml_parser import XMLParser
 
 
 class TestXMLParser(unittest.TestCase):

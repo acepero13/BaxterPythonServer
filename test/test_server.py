@@ -1,8 +1,9 @@
 from unittest import TestCase
 
-from Server import Server
-from customexceptions.CustomExceptions import ServerNotStartedException
 from mock import MagicMock
+
+from Server import Server
+from src.customexceptions.CustomExceptions import ServerNotStartedException
 
 
 class TestServer(TestCase):
@@ -26,8 +27,6 @@ class TestServer(TestCase):
         self.server.run()
         self.assertEqual(0, self.server.is_listening())
 
-    def test_ProcessReceivedData(self):
-        self.server.process_received_data("Test")
 
 
 

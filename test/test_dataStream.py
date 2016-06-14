@@ -1,5 +1,7 @@
 from unittest import TestCase
-from mock import patch, Mock
+
+from mock import Mock
+
 from DataStream import DataStream
 from Observer import Observer
 

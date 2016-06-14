@@ -1,10 +1,8 @@
 from unittest import TestCase
 
-from mock import Mock
-
 from GenericDevice import GenericDevice
-from customexceptions.CustomExceptions import MethodDoesNotExists, ExecutionException
-from utils.datareceiver import DataReceiver
+from src.customexceptions.CustomExceptions import MethodDoesNotExists, ExecutionException
+from src.utils.datareceiver import DataReceiver
 
 I_WAS_CALLED = "I was called"
 

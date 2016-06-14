@@ -1,7 +1,8 @@
-import test
-from customexceptions.CustomExceptions import MethodDoesNotExists, ExecutionException
-from utils.parsers import Parser
+from src.customexceptions.CustomExceptions import MethodDoesNotExists, ExecutionException
+from src.utils.parsers import Parser
 
+
+# TODO: Add logger
 
 class DataReceiver(object):
     def __init__(self, obj, dev):
@@ -40,6 +41,7 @@ class DataReceiver(object):
             try:
                 return self.execute_method()
             except Exception, err:
+                print err
                 raise ExecutionException
         else:
             raise MethodDoesNotExists

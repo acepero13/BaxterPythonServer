@@ -1,5 +1,5 @@
 from Observable import Observable
-from utils.parsers import Parser
+from src.utils.parsers import Parser
 
 END_MARKER = "#END"
 

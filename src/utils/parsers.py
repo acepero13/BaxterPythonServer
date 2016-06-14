@@ -1,5 +1,5 @@
-from utils.json_parser import JsonParser
-from utils.xml_parser import XMLParser
+from src.utils.json_parser import JsonParser
+from src.utils.xml_parser import XMLParser
 
 
 class Parser(object):
