@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from Server import Server
-from myexceptions.ServerNotStarted import ServerNotStartedException
+from customexceptions.ServerNotStarted import ServerNotStartedException
 from mock import MagicMock
 
 

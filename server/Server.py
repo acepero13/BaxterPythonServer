@@ -4,7 +4,7 @@ from threading import Thread
 import thread
 
 from Observer import Observer
-from myexceptions.ServerNotStarted import ServerNotStartedException
+from customexceptions.ServerNotStarted import ServerNotStartedException
 
 
 class Server(Thread, Observer):

@@ -3,32 +3,32 @@ from utils.parsers import Parser
 
 
 class DataReceiver(object):
-    def __init__(self):
+    def __init__(self, obj):
         self.parser = Parser()
+        self.method = None
+        self.params = None
+        self.data = obj
+        self.gestures = list()
+        if self.is_proper_object():
+            self.method = self.data['method']
+            self.params = self.data['params']
+        self.reserved_actions = ["closeConnection"]
 
-    def perform(self, data):
-        response = list()
-        return 1
-        obj = self.parser.parse(data)
-        if not obj and isinstance(data, str):
-            if "#" in data:
-                self.client = data[data.find("#")+1:]
-                print "CLIENT: " + self.client
+    def perform_action(self):
+        if isinstance(self.data, str):
             return None
-        method = obj['method']
-        params = obj['params']
-        if method == 'closeConnection':
-            return 'closeConnection'
-        gestures = test.DummyClass()
-        methods = [method_iter for method_iter in dir(gestures) if callable(getattr(gestures, method_iter))]
-        if method in methods:
-            try:
-                func = getattr(gestures, method)
-                if len(params) > 0 and params != None and params != "null":
-                    res = func(params)
-                else:
-                    res = func()
-            except AttributeError:
-                print "dostuff not found"
-        print res
-        return res
+        if self.method is not None and self.is_reserved_action():
+            return self.method
+
+    def is_proper_object(self):
+        if isinstance(self.data, dict) and self.data['method'] is not None:
+            return True
+        return False
+
+    def is_reserved_action(self):
+        if self.method in self.reserved_actions:
+            return True
+        return False
+
+
+
