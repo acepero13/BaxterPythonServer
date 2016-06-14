@@ -36,8 +36,8 @@ class DataReceiver(object):
         return False
 
     def execute_device_method(self):
-        methods = self.get_callable_methdos_from_obj()
-        if self.method in methods:
+        callable_methods = self.get_callable_methdos_from_obj()
+        if self.method in callable_methods:
             try:
                 return self.execute_method()
             except Exception, err:
