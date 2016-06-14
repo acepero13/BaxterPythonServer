@@ -20,24 +20,35 @@ class Server(Thread, Observer):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connection = None
 
+    # Override
     def update(self, data=None):
         img_device = ImageViewerDevice()
         processor = DataReceiver(data, img_device)
-        result = processor.perform_action()
+        self.try_to_perform_action(processor)
         self.send_response(self.connection)
+
+    @staticmethod
+    def try_to_perform_action(processor):
+        try:
+            processor.perform_action()
+        except Exception, err:
+            print err
 
     def start_listening(self, host="127.0.0.1", port=1313):
         try:
-            self.socket.bind((host, port))
-            self.socket.listen(5)
-            self.setDaemon(True)
-            self.start()
-            self.connected = True
+            self.bind_and_start(host, port)
             print "listening in address: ", host, " in port: ", port
         except Exception, err:
             self.connected = False
             print err
             raise ServerNotStartedException
+
+    def bind_and_start(self, host, port):
+        self.socket.bind((host, port))
+        self.socket.listen(5)
+        self.setDaemon(True)
+        self.start()
+        self.connected = True
 
     def is_listening(self):
         return self.connected
@@ -55,12 +66,15 @@ class Server(Thread, Observer):
     def read_data(self, connection, data_stream):
         data = connection.recv(1024)
         if not data:
-            self.connected = False
-            connection.close()
-            return False
+            return self.close_client_connection(connection)
         else:
             data_stream.append(data)
             return True
+
+    def close_client_connection(self, connection):
+        self.connected = False
+        connection.close()
+        return False
 
     def run(self):
         is_running = True

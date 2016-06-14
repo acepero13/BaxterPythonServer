@@ -24,5 +24,3 @@ class ImageViewerDevice(GenericDevice):
         sbuf = StringIO.StringIO(image_data)
         wx.CallAfter(Publisher().sendMessage, "update", sbuf)
         return True
-
-#             self.send_response(connection)
