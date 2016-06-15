@@ -6,9 +6,10 @@ import wx
 from threading import Thread
 
 ########################################################################
+
+from src.server.Server import Server
 from wx.lib.pubsub import Publisher
 
-from Server import Server
 
 
 class MyPanel(wx.Panel):

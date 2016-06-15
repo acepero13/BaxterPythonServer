@@ -4,7 +4,7 @@ import base64
 from wx import wx
 from wx.lib.pubsub import Publisher
 
-from GenericDevice import GenericDevice
+from src.server.GenericDevice import GenericDevice
 
 
 class ImageViewerDevice(GenericDevice):
@@ -12,7 +12,6 @@ class ImageViewerDevice(GenericDevice):
         self.data = None
 
     def paint(self, params):
-        print "I'm paiting..."
         if len(params) > 0:
             return self.send_image_to_wx(params)
         return False
