@@ -1,7 +1,5 @@
-import asyncore
-import socket
 from twisted.internet import reactor
-from twisted.internet.protocol import ServerFactory, Protocol, Factory
+from twisted.internet.protocol import ServerFactory, Protocol
 
 from DataStream import DataStream
 from Observer import Observer
