@@ -82,8 +82,8 @@ class MyFrame(wx.Frame):
         panel = MyPanel(self)
  
         # start the IPC server
-        self.server = Server()
-        self.server.start_listening()
+        #self.server = Server()
+        #self.server.start_listening()
 
         self.Show()
  
