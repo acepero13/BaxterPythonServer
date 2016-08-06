@@ -6,7 +6,6 @@ from threading import Thread
 from DataStream import DataStream
 from Observer import Observer
 from src.customexceptions.CustomExceptions import ServerNotStartedException
-from src.plugindevices.ImageViewerDevice import ImageViewerDevice
 from src.utils.datareceiver import DataReceiver
 
 BROKEN_PIPE = 32
@@ -14,16 +13,16 @@ BROKEN_PIPE = 32
 
 class Server(Thread, Observer):
 
-    def __init__(self):
+    def __init__(self, device):
         Thread.__init__(self)
         self.connected = False
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connection = None
+        self.current_device = device
 
     # Override
     def update(self, data=None):
-        img_device = ImageViewerDevice()
-        processor = DataReceiver(data, img_device)
+        processor = DataReceiver(data, self.current_device)
         self.try_to_perform_action(processor)
         self.send_response(self.connection)
 
@@ -80,8 +79,8 @@ class Server(Thread, Observer):
         is_running = True
         while is_running:
             is_running = self.accept_new_connection()
-        self.close_connection()
         self.shut_down_connection()
+        self.close_connection()
 
     def accept_new_connection(self):
         try:
@@ -116,6 +115,3 @@ class Server(Thread, Observer):
                 connection.sendall("CLIENTID#BAXTER1\n")
             except socket.error, e:
                 return False
-
-
-
