@@ -5,6 +5,8 @@ from DataStream import DataStream
 from Observer import Observer
 from src.utils.datareceiver import DataReceiver
 
+SERVERPORT = 1313
+
 
 class TwistedServer:
     def __init__(self, device):
@@ -12,7 +14,7 @@ class TwistedServer:
         self.connected = False
 
     def start_listening(self):
-        reactor.listenTCP(1313, DataReceiverFactory(self.current_device))
+        reactor.listenTCP(SERVERPORT, DataReceiverFactory(self.current_device))
         reactor.run()
 
 
