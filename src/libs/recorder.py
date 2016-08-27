@@ -22,17 +22,19 @@ LAST_NOTIFICATION_TIME = None
 def record(duration):
     '''Records Input From Microphone Using PyAudio'''
     print PYAUDIO_INSTANCE
-    in_stream = PYAUDIO_INSTANCE.open(
-        format=pyaudio.paInt16,
-        channels=PYAUDIO_CHANNELS,
-        rate=PYAUDIO_RATE,
-        input=PYAUDIO_INPUT,
-        frames_per_buffer=PYAUDIO_FRAMES_PER_BUFFER
-    )
+    try:
+        in_stream = open_channel()
+        save_temp_wav(duration, in_stream)
+    except IOError as err:
+        print "Error", err
+        raise err
+    in_stream.close()
+    print "End recording"
 
+
+def save_temp_wav(duration, in_stream):
     out = []
     upper_lim = NUM_FRAMES * duration
-
     for i in xrange(0, upper_lim):
         data = in_stream.read(PYAUDIO_FRAMES_PER_BUFFER, exception_on_overflow=False)
         out.append(data)
@@ -45,4 +47,14 @@ def record(duration):
     out_file.setframerate(44100)
     out_file.writeframes(data)
     out_file.close()
-    print "End recording"
+
+
+def open_channel():
+    in_stream = PYAUDIO_INSTANCE.open(
+        format=pyaudio.paInt16,
+        channels=PYAUDIO_CHANNELS,
+        rate=PYAUDIO_RATE,
+        input=PYAUDIO_INPUT,
+        frames_per_buffer=PYAUDIO_FRAMES_PER_BUFFER
+    )
+    return in_stream

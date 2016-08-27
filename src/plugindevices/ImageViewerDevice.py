@@ -7,7 +7,8 @@ from threading import Thread
 from imageviwer import MyFrame
 from src.server.GenericDevice import GenericDevice
 
-
+import logging
+logging.basicConfig(filename='ImageViewerLog.log',level=logging.DEBUG)
 class ImageViewerDevice(GenericDevice, Thread):
     def __init__(self):
         Thread.__init__(self)
@@ -16,8 +17,13 @@ class ImageViewerDevice(GenericDevice, Thread):
 
     def paint(self, params):
         if len(params) > 0:
+            logging.info('Im paiting an image!')
             return self.send_image_to_wx(params)
         return False
+
+    def look_left(self):
+        print "I'm looking left!"
+        logging.info('Im looking left!!')
 
     @staticmethod
     def send_image_to_wx(params):

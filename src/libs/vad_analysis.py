@@ -3,6 +3,8 @@ from recorder import record
 from recorder import OUTPUT_FILE
 from src.libs.VAD import VAD
 
+SILENCE_THRESHOLD = 5
+
 PORT = 1314
 DURATION = 1
 RUNNING = True
@@ -24,13 +26,23 @@ class VADAnalysis(object):
 
     def start_listening(self):
         counter_instance = 0
+        counter_no_speaking = 0
         while RUNNING:
-            record(DURATION)
-            print "Calling moattar"
-            speaking, AVERAGE_INTENSITY_OF_RUNS = VAD.moattar_homayounpour(OUTPUT_FILE, 0, counter_instance)
-            counter_instance += 1
-            print "Speaking: ", speaking
-            if speaking:
-                self.clientsocket.send("#DETECTEDSPEECH#end#\n")
-            else:
+            try:
+                record(DURATION)
+                self.analyse(counter_instance, counter_no_speaking)
+            except IOError as err:
+                continue
+
+    def analyse(self, counter_instance, counter_no_speaking):
+        print "Calling moattar"
+        speaking, AVERAGE_INTENSITY_OF_RUNS = VAD.moattar_homayounpour(OUTPUT_FILE, 0, counter_instance)
+        counter_instance += 1
+        print "Speaking: ", speaking
+        if speaking:
+            self.clientsocket.send("#DETECTEDSPEECH#end#\n")
+            counter_no_speaking = 0
+        else:
+            counter_no_speaking += 1
+            if counter_no_speaking >= SILENCE_THRESHOLD:
                 self.clientsocket.send("#NONDETECTEDSPEECH#end#\n")
