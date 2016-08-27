@@ -13,6 +13,7 @@ class VADAnalysis(object):
     def __init__(self):
         self.clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connect_to_server()
+        self.counter_no_speaking = 0
 
     def connect_to_server(self):
         connected = False
@@ -26,7 +27,6 @@ class VADAnalysis(object):
 
     def start_listening(self):
         counter_instance = 0
-        counter_no_speaking = 0
         while RUNNING:
             try:
                 record(DURATION)
@@ -34,15 +34,15 @@ class VADAnalysis(object):
             except IOError as err:
                 continue
 
-    def analyse(self, counter_instance, counter_no_speaking):
+    def analyse(self, counter_instance):
         print "Calling moattar"
         speaking, AVERAGE_INTENSITY_OF_RUNS = VAD.moattar_homayounpour(OUTPUT_FILE, 0, counter_instance)
         counter_instance += 1
         print "Speaking: ", speaking
         if speaking:
             self.clientsocket.send("#DETECTEDSPEECH#end#\n")
-            counter_no_speaking = 0
+            self.counter_no_speaking = 0
         else:
-            counter_no_speaking += 1
-            if counter_no_speaking >= SILENCE_THRESHOLD:
+            self.counter_no_speaking += 1
+            if self.counter_no_speaking >= SILENCE_THRESHOLD:
                 self.clientsocket.send("#NONDETECTEDSPEECH#end#\n")
