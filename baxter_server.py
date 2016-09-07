@@ -25,8 +25,8 @@ def start_thread_server(device):
 
 if __name__ == '__main__':
     print(sys.path)
-    #device = head_gestures.HeadGestures()
-    device = ImageViewerDevice()
+    device = head_gestures.HeadGestures()
+    #device = ImageViewerDevice()
     thread_listener = start_thread_server(device)
     thread_speech = start_speech_recognition_server()
     thread_listener.join()

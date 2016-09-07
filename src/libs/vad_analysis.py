@@ -30,7 +30,7 @@ class VADAnalysis(object):
         while RUNNING:
             try:
                 record(DURATION)
-                self.analyse(counter_instance, counter_no_speaking)
+                self.analyse(counter_instance)
             except IOError as err:
                 continue
 
