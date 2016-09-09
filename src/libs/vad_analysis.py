@@ -1,14 +1,12 @@
 import socket
+
+import time
+
 from recorder import record
 from recorder import OUTPUT_FILE
 from src.libs.VAD import VAD
-from src.libs.sender import Sender
+from src.constants.constants import *
 
-SILENCE_THRESHOLD = 5
-
-
-DURATION = 1
-RUNNING = True
 
 class VADAnalysis(object):
     def __init__(self, client):
@@ -24,6 +22,7 @@ class VADAnalysis(object):
             try:
                 record(DURATION)
                 self.analyse(counter_instance)
+                time.sleep(0.08)
             except IOError as err:
                 continue
 

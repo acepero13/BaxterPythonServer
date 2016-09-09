@@ -1,6 +1,6 @@
 import sys
 from threading import Thread
-import asdb
+#import asdb
 
 from src.libs.face_detection import FaceDetector
 from src.libs.sender import Sender

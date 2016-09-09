@@ -1,13 +1,14 @@
 import cv2
 #cascPath = sys.argv[1]
 import math
-cascPath = "/home/alvaro/ros_2/src/baxter_examples/scripts/src/libs/haarcascade_frontalface_default.xml"
-
+from src.constants.constants import *
+import time
+is_from_main = False
 
 class FaceDetector(object):
     def __init__(self, client_socket):
         self.sender = client_socket
-        self.faceCascade = cv2.CascadeClassifier(cascPath)
+        self.faceCascade = cv2.CascadeClassifier(CASCPATH)
         self.frame_width = 0
         self.frame_mid = 0
         self.get_frame_size()
@@ -16,10 +17,15 @@ class FaceDetector(object):
         self.start_capturing()
 
     def get_frame_size(self):
-        self.video_capture = cv2.VideoCapture(0)
+        self.video_capture = cv2.VideoCapture(VIDEO_CAMERA)
+        self.set_resolution()
         ret, frame = self.video_capture.read()
-        self.frame_width = frame.shape[1]
+        self.frame_width = frame.shape[WIDTH]
         self.frame_mid = self.frame_width / 2
+
+    def set_resolution(self):
+        self.video_capture.set(3, 640)
+        self.video_capture.set(4, 480)
 
     def is_centered(self, x, w):
         ratio = 0
@@ -37,8 +43,12 @@ class FaceDetector(object):
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = self.get_faces(gray)
             self.paint_faces(faces, frame)
+            time.sleep(WAITINGTIME)
             #print "frame read"
-            self.paint_video(frame)
+            if is_from_main:
+                self.paint_video(frame)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
 
         # When everything is done, release the capture
         self.video_capture.release()
@@ -52,13 +62,16 @@ class FaceDetector(object):
             color = (0, 0, 255)  # ed
             centered, diff = self.is_centered(x, w)
             if centered:
-                print "Centered"
                 color = (0, 255, 0)  # green
-                self.sender.send("#FACECENTERED#" + str(diff) + "#end#\n")
+                self.send_to_server("#FACECENTERED#" + str(diff) + "#end#\n")
             elif self.sender is not None:
-                print "Non centered"
-                self.sender.send("#FACENONCENTERED#" + str(diff) + "#end#\n")
+                self.send_to_server("#FACENONCENTERED#" + str(diff) + "#end#\n")
             cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
+
+    def send_to_server(self, message):
+        if self.sender is not None:
+            self.sender.send(message)
+
 
     def get_faces(self, gray):
         faces = self.faceCascade.detectMultiScale(
@@ -71,5 +84,6 @@ class FaceDetector(object):
         return faces
 
 if __name__ == '__main__':
+    is_from_main = True
     face_detector = FaceDetector(None)
     face_detector.start_capturing()
