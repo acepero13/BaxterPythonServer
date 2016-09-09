@@ -2,28 +2,21 @@ import socket
 from recorder import record
 from recorder import OUTPUT_FILE
 from src.libs.VAD import VAD
+from src.libs.sender import Sender
 
 SILENCE_THRESHOLD = 5
 
-PORT = 1314
+
 DURATION = 1
 RUNNING = True
 
 class VADAnalysis(object):
-    def __init__(self):
-        self.clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.connect_to_server()
+    def __init__(self, client):
+        self.sender = client
         self.counter_no_speaking = 0
 
-    def connect_to_server(self):
-        connected = False
-        while not connected:
-            try:
-                self.clientsocket.connect(('127.0.0.1', PORT))
-                connected = True
-                print "Connected"
-            except Exception as e:
-               pass
+    def execute(self):
+        self.start_listening()
 
     def start_listening(self):
         counter_instance = 0
@@ -40,9 +33,9 @@ class VADAnalysis(object):
         counter_instance += 1
         print "Speaking: ", speaking
         if speaking:
-            self.clientsocket.send("#DETECTEDSPEECH#end#\n")
+            self.sender.send("#DETECTEDSPEECH#end#\n")
             self.counter_no_speaking = 0
         else:
             self.counter_no_speaking += 1
             if self.counter_no_speaking >= SILENCE_THRESHOLD:
-                self.clientsocket.send("#NONDETECTEDSPEECH#end#\n")
+                self.sender.send("#NONDETECTEDSPEECH#end#\n")
