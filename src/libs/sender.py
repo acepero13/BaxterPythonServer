@@ -20,9 +20,8 @@ class Sender(object):
                 self.clientsocket.connect(('127.0.0.1', VSM_SERVER_PORT))
                 self.connected = True
                 print "Connected"
-                time.sleep(WAITINGTIME)
             except Exception as e:
-               pass
+                time.sleep(WAITINGTIME)
 
     def send(self, message):
         if self.connected:

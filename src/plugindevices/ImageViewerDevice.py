@@ -25,6 +25,12 @@ class ImageViewerDevice(GenericDevice, Thread):
         print "I'm looking left!"
         logging.info('Im looking left!!')
 
+    def look_at(self, params):
+        at = params[0]
+        print "I'm looking at: " + at
+        logging.info("I'm looking at: " + at)
+
+
     @staticmethod
     def send_image_to_wx(params):
         img = params[0]

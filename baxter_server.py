@@ -1,14 +1,12 @@
 import sys
 from threading import Thread
-#import asdb
+import asdb
 
 from src.libs.face_detection import FaceDetector
 from src.libs.sender import Sender
 from src.libs.vad_analysis import VADAnalysis
 from src.server.AsyncServer import TwistedServer
 from src.plugindevices.ImageViewerDevice import ImageViewerDevice
-from src.libs.speech_recognition import *
-from src.server.Server import Server
 #import head_gestures
 
 
@@ -33,12 +31,11 @@ def start_thread_server(device):
 
 
 if __name__ == '__main__':
-    print(sys.path)
     #asdb.set_trace()
-    sender = Sender()
     #device = head_gestures.HeadGestures()
     device = ImageViewerDevice()
     thread_listener = start_thread_server(device)
+    sender = Sender()
     thread_speech = start_speech_recognition_server(sender)
     thread_face_detector = start_speech_face_detection(sender)
     thread_listener.join()
