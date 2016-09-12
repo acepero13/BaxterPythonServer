@@ -25,7 +25,7 @@ class Sender(object):
 
     def send(self, message):
         if self.connected:
-            self.lock_sending.acquire()
             print "sending " + message
+            self.lock_sending.acquire()
             self.clientsocket.send(message)
             self.lock_sending.release()

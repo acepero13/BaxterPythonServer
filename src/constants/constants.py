@@ -6,3 +6,6 @@ VSM_SERVER_PORT = 1314
 WIDTH = 1
 VIDEO_CAMERA = 1
 CASCPATH = "/home/alvaro/PycharmProjects/BaxterServer/src/libs/haarcascade_frontalface_default.xml"
+MAX_PANE_ANGLE = 1.5
+MIN_PANE_ANGLE = -1.5
+WOBBLYING_SPEED = 50

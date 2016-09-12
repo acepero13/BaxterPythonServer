@@ -42,9 +42,8 @@ class FaceDetector(object):
             ret, frame = self.video_capture.read()
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = self.get_faces(gray)
-            self.paint_faces(faces, frame)
+            self.process_faces(faces, frame)
             time.sleep(WAITINGTIME)
-            #print "frame read"
             if is_from_main:
                 self.paint_video(frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -53,6 +52,12 @@ class FaceDetector(object):
         # When everything is done, release the capture
         self.video_capture.release()
         cv2.destroyAllWindows()
+
+    def process_faces(self, faces, frame):
+        if faces is not None and len(faces):
+            self.paint_faces(faces, frame)
+        elif self.sender is not None:  # TODO: Hacer panning
+            self.send_to_server("#FACENONCENTERED#" + str(0) + "#end#\n")
 
     def paint_video(self, frame):
         cv2.imshow('Video', frame)

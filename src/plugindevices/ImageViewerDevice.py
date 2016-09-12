@@ -30,6 +30,9 @@ class ImageViewerDevice(GenericDevice, Thread):
         print "I'm looking at: " + at
         logging.info("I'm looking at: " + at)
 
+    def search_for_face(self):
+        print "I'm searching for faces"
+
 
     @staticmethod
     def send_image_to_wx(params):
