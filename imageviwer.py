@@ -8,7 +8,9 @@ from threading import Thread
 ########################################################################
 
 from src.server.Server import Server
-from wx.lib.pubsub import Publisher
+from wx.lib.pubsub import setuparg1
+from wx.lib.pubsub import pub as Publisher
+
 
 
 
@@ -24,7 +26,7 @@ class MyPanel(wx.Panel):
 
         self.createWidgets()
 
-        Publisher().subscribe(self.updateDisplay, "update")
+        Publisher.subscribe(self.updateDisplay, "update")
 
     def createWidgets(self):
         instructions = 'Browse for an image'

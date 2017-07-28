@@ -1,8 +1,9 @@
 import StringIO
 import base64
-
 from wx import wx
-from wx.lib.pubsub import Publisher
+from wx.lib.pubsub import setuparg1
+from wx.lib.pubsub import pub as Publisher
+
 from threading import Thread
 from imageviwer import MyFrame
 from src.server.GenericDevice import GenericDevice
@@ -39,7 +40,7 @@ class ImageViewerDevice(GenericDevice, Thread):
         img = params[0]
         image_data = base64.b64decode(img)
         sbuf = StringIO.StringIO(image_data)
-        wx.CallAfter(Publisher().sendMessage, "update", sbuf)
+        wx.CallAfter(Publisher.sendMessage, "update", sbuf)
         return True
 
     def run(self):

@@ -18,7 +18,8 @@ class XMLParser(object):
     def read_xml(string):
         try:
             root = ET.fromstring(string)
-        except:
+        except Exception as e:
+            print e
             raise Exception('A problem has occurred parsing xml')
         return root
 
